@@ -19,6 +19,7 @@ if "`c(username)'"=="parthchawla1"	{
 
 use "$data/Regency-level vars/Regency-level vars.dta"
 rename birthpl bps_1995
+distinct bps_1995
 tempfile schools
 save `schools'
 
@@ -33,36 +34,56 @@ forval i = 1993/2009 {
 order bps_2014 name_2014 bps_2015 name_2015
 
 merge m:1 bps_1995 using `schools'
-keep if _merge == 3
+drop if _merge == 1
 drop _merge
 order province bps_1995 name_1995 nin-nen71newish
-rename (province bps_1995 name_1995) (province_name regency_code regency_name)
 
-duplicates drop regency_code, force
-distinct regency_code
-
-tempfile merged1
-save `merged1'
+forval yr = 1993/1999 {
+	preserve
+	duplicates drop bps_`yr', force
+	tempfile cw`yr'
+	save `cw`yr''
+	restore
+}
 
 ********************************************************************************
 
-forval yr = 1986/1999 {
+forval yr = 1986/1993 {
 	use "$data/Waves/si`yr'.dta", clear
-
 	di "`yr'"
 	quietly destring, replace
-
-	gen regency_code = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
-
-	merge m:1 regency_code using `merged1'
+	
+	gen bps_1993 = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
+	merge m:1 bps_1993 using `cw1993'
 	keep if _merge == 3
 	drop _merge
 	
 	cap drop YEAR _DFYRST _DFYEND
 	gen year = `yr'
+	
+	rename bps_1993 regency_code
 	order year regency_code
 	distinct regency_code
+	tempfile y`yr'
+	save `y`yr''
+}
+
+forval yr = 1994/1999 {
+	use "$data/Waves/si`yr'.dta", clear
+	di "`yr'"
+	quietly destring, replace
 	
+	gen bps_`yr' = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
+	merge m:1 bps_`yr' using `cw`yr''
+	keep if _merge == 3
+	drop _merge
+	
+	cap drop YEAR _DFYRST _DFYEND
+	gen year = `yr'
+	
+	rename bps_`yr' regency_code
+	order year regency_code
+	distinct regency_code
 	tempfile y`yr'
 	save `y`yr''
 }
