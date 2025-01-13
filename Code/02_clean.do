@@ -39,7 +39,6 @@ rename _LPRNOU tot_paid_prod
 rename _LNPNOU tot_paid_other
 rename _LPDNOU tot_paid_workers
 rename _LTLNOU tot_workers
-rename _PROD5D main_prod_5d
 rename _ZPSCCU w_sal_prod_cash
 rename _ZPSKCU w_sal_prod_inkind
 rename _ZNSCCU w_sal_nonprod_cash
@@ -367,8 +366,6 @@ rename _A6V4641 all_rsch_tot
 
 rename _IMRVCU rent_mach_tools_000
 rename _IBRVCU1 rent_bldg_000
-rename _ISICW main_activity_words
-rename _PRODW main_product_words
 rename _LPMNOU1 unpaid_prod_male
 rename _LPWNOU1 unpaid_prod_female
 rename _LNMNOU1 unpaid_other_male
@@ -384,7 +381,6 @@ rename _CMTTCU mach_acq_rep_tot
 rename _CVTTCU veh_acq_rep_tot
 rename _COTTCU othercap_acq_rep_tot
 rename _CTTTCU tot_acq_rep
-rename _KKI5D mainprod_5d_bps
 
 rename _LPMSNF edatt_prod_male_1
 rename _LPWSNF edatt_prod_female_1

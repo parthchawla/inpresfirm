@@ -53,17 +53,21 @@ forval yr = 1986/1993 {
 	di "`yr'"
 	quietly destring, replace
 	
+	* No cw before 1993 so use 1993 for 1986-1993
 	gen bps_1993 = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
-	merge m:1 bps_1993 using `cw1993'
+	merge m:1 bps_1993 using `cw1993', keepusing(bps_1995)
 	keep if _merge == 3
 	drop _merge
 	
 	cap drop YEAR _DFYRST _DFYEND
 	gen year = `yr'
 	
-	rename bps_1993 regency_code
+	* Harmonize to 1995
+	rename bps_1995 regency_code
 	order year regency_code
 	distinct regency_code
+	drop bps_1993
+	
 	tempfile y`yr'
 	save `y`yr''
 }
@@ -74,16 +78,21 @@ forval yr = 1994/1999 {
 	quietly destring, replace
 	
 	gen bps_`yr' = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
-	merge m:1 bps_`yr' using `cw`yr''
+	merge m:1 bps_`yr' using `cw`yr'', keepusing(bps_1995)
 	keep if _merge == 3
 	drop _merge
 	
 	cap drop YEAR _DFYRST _DFYEND
 	gen year = `yr'
 	
-	rename bps_`yr' regency_code
+	* Harmonize to 1995
+	rename bps_1995 regency_code
 	order year regency_code
 	distinct regency_code
+	if `yr' != 1995 {
+		drop bps_`yr'
+	}
+	
 	tempfile y`yr'
 	save `y`yr''
 }
@@ -95,5 +104,5 @@ forval yr = 1987/1999 {
 }
 
 tab year
-distinct regency_code
+distinct regency_code // 291
 save "$data/firms_86_99_merged.dta", replace
