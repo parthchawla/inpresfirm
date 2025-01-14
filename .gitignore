@@ -11,6 +11,7 @@ users
 *.sublime-project
 *.sublime-workspace
 *.xlsx
+*.xls
 *.dta
 *.log
 ga_config.json
