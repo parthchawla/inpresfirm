@@ -55,7 +55,11 @@ forval yr = 1986/1993 {
 	
 	* No cw before 1993 so use 1993 for 1986-1993
 	gen bps_1993 = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
-	merge m:1 bps_1993 using `cw1993', keepusing(bps_1995)
+	merge m:1 bps_1993 using `cw1993', keepusing(bps_1995 ///
+	nin recp ch71 en71 wsppc dens71 moldyed birthlat birthlong ///
+	Schools73new Schools74new Schools75new Schools76new Schools77new ///
+	Schools78new pop71new ch71new totinnew ninnew nch71new atsc71new ///
+	en71newish en71new nen71new nen71newish)
 	keep if _merge == 3
 	drop _merge
 	
@@ -78,7 +82,11 @@ forval yr = 1994/1999 {
 	quietly destring, replace
 	
 	gen bps_`yr' = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
-	merge m:1 bps_`yr' using `cw`yr'', keepusing(bps_1995)
+	merge m:1 bps_`yr' using `cw`yr'', keepusing(bps_1995 ///
+	nin recp ch71 en71 wsppc dens71 moldyed birthlat birthlong ///
+	Schools73new Schools74new Schools75new Schools76new Schools77new ///
+	Schools78new pop71new ch71new totinnew ninnew nch71new atsc71new ///
+	en71newish en71new nen71new nen71newish)
 	keep if _merge == 3
 	drop _merge
 	
