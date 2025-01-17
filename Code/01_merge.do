@@ -48,12 +48,12 @@ forval yr = 1993/1999 {
 
 ********************************************************************************
 
-forval yr = 1986/1993 {
+forval yr = 1980/1993 {
 	use "$data/Waves/si`yr'.dta", clear
 	di "`yr'"
 	quietly destring, replace
 	
-	* No cw before 1993 so use 1993 for 1986-1993
+	* No cw before 1993 so use 1993 before that
 	gen bps_1993 = _DPROVI * 100 + real(string(_DKABUP, "%02.0f"))
 	merge m:1 bps_1993 using `cw1993', keepusing(bps_1995 ///
 	nin recp ch71 en71 wsppc dens71 moldyed birthlat birthlong ///
@@ -105,8 +105,8 @@ forval yr = 1994/1999 {
 	save `y`yr''
 }
 
-use `y1986', clear
-forval yr = 1987/1999 {
+use `y1980', clear
+forval yr = 1981/1999 {
 	di "`yr'"
 	append using `y`yr''
 }
