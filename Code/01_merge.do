@@ -38,7 +38,7 @@ drop if _merge == 1
 drop _merge
 order province bps_1995 name_1995 nin-nen71newish
 
-forval yr = 1993/1999 {
+forval yr = 1993/2004 {
 	preserve
 	duplicates drop bps_`yr', force
 	tempfile cw`yr'
@@ -63,7 +63,9 @@ forval yr = 1980/1993 {
 	keep if _merge == 3
 	drop _merge
 	
-	cap drop YEAR _DFYRST _DFYEND
+	capture confirm variable _FLAG
+    if _rc == 0 drop _FLAG
+    cap drop YEAR _DFYRST _DFYEND
 	gen year = `yr'
 	
 	* Harmonize to 1995
@@ -76,7 +78,7 @@ forval yr = 1980/1993 {
 	save `y`yr''
 }
 
-forval yr = 1994/1999 {
+forval yr = 1994/2004 {
 	use "$data/Waves/si`yr'.dta", clear
 	di "`yr'"
 	quietly destring, replace
@@ -90,7 +92,9 @@ forval yr = 1994/1999 {
 	keep if _merge == 3
 	drop _merge
 	
-	cap drop YEAR _DFYRST _DFYEND
+	capture confirm variable _FLAG
+    if _rc == 0 drop _FLAG
+    cap drop YEAR _DFYRST _DFYEND
 	gen year = `yr'
 	
 	* Harmonize to 1995
@@ -106,7 +110,7 @@ forval yr = 1994/1999 {
 }
 
 use `y1980', clear
-forval yr = 1981/1999 {
+forval yr = 1981/2004 {
 	di "`yr'"
 	append using `y`yr''
 }
