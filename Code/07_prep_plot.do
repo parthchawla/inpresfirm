@@ -230,60 +230,10 @@ save "$data/temp_reg.dta", replace
 */
 
 ********************************************************************************
-*** Run regressions (Cali)
-********************************************************************************
-/*
-use "$data/temp_reg.dta", clear
-
-* Did INPRES affect firm worker education levels?
-// reghdfe share_primary nin en71, allbaselevels noomitted ///
-// absorb(PSID kblir2 year) vce(cl kblir2)
-
-local outcomes2 tfp_wrdg_va_m tfp_acf_va_m1 tfp_acf_va_m2 ///
-ln_output ln_output_pw ///
-ln_tot_goods_produced ln_tot_goods_pw ///
-ln_value_added ln_value_added_pw ///
-ln_total_est_val ln_total_est_val_pw
-
-foreach y in `outcomes2' {
-	eststo: qui reghdfe `y' c.share_primary_pre##c.nin ch71 if year>=1997, allbaselevels noomitted ///
-	absorb(kblir2 year) vce(cl kblir2)
-
-	eststo: qui reghdfe `y' c.share_primary_pre##c.nin ch71 if year>=1997, allbaselevels noomitted ///
-	absorb(kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' c.share_primary_pre##c.nin ch71 if year>=1997, allbaselevels noomitted ///
-	absorb(regency_code kblir2 year) vce(cl kblir2)
-	
-	eststo: qui reghdfe `y' c.share_primary_pre##c.nin ch71 if year>=1997, allbaselevels noomitted ///
-	absorb(regency_code kblir2 year) vce(cl regency_code)
-	
-	esttab, star(* .10 ** .05 *** .01) not se noomitted
-	eststo clear
-}
-*/
-
-********************************************************************************
-*** Run regressions (Duflo)
+*** Plot
 ********************************************************************************
 
 use "$data/temp_reg.dta", clear
-
-local outcomes1 tot_edatt_pw tot_edatt_prod_pw tot_edatt_nonprod_pw
-
-// stop overcomplicating, run Halim spec exploiting only geographic variation
-
-** First stage, weird edatt values for 1996 and 1997; 1995 ok
-
-// foreach y in `outcomes1' {
-// 	reghdfe `y' i.year##c.nin, ///
-// 	absorb(i.year##c.ch71 kblir2 regency_code) vce(cl kblir2) allbaselevels
-//	
-// 	reghdfe `y' nin if year==1995, ///
-// 	absorb(kblir2) vce(cl kblir2)
-// }
-
-// tot_edatt_pw tot_edatt_prod_pw cl kblir2: + (incorrect)
 
 local outcomes2 tfp_wrdg_va_m tfp_acf_va_m1 tfp_acf_va_m2 ///
 ln_output ln_output_pw ///
@@ -304,26 +254,66 @@ local outcomes5 ln_num_shifts ln_num_shifts_pw ///
 ln_exp_rd_eng_000 ln_exp_rd_eng_pw ///
 ln_exp_hr_training_000 ln_exp_hr_training_pw
 
-foreach y in `outcomes4' {
-	
-	eststo: qui reghdfe `y' i.year##c.nin, allbaselevels noomitted ///
-	absorb(i.year##c.(ch71 en71) kblir2) vce(cl kblir2)
-	
-	eststo: qui reghdfe `y' i.year##c.nin, allbaselevels noomitted ///
-	absorb(i.year##c.(ch71 en71) regency_code kblir2) vce(cl kblir2)
-	
-	eststo: qui reghdfe `y' i.year##c.nin, allbaselevels noomitted ///
-	absorb(i.year##c.(ch71 en71) regency_code kblir2) vce(cl regency_code)
-	
-	esttab, star(* .10 ** .05 *** .01) not se noomitted
-	eststo clear
-	
+bys year: egen med_nin = median(nin)
+bys year: egen mean_nin = mean(nin)
+gen abv_med_nin = (nin > med_nin)
+gen abv_mean_nin = (nin > mean_nin)
+summ med_nin mean_nin
+tab abv_med_nin
+tab abv_mean_nin
+
+foreach y in `outcomes2' {
+preserve
+	collapse (mean) `y', by(year abv_med_nin)
+	twoway (connected `y' year if abv_med_nin==1) || ///
+		(connected `y' year if abv_med_nin==0), ///
+		title("`y'", size(medium)) ///
+		yla(,labs(small)) xla(,labs(small)) ///
+		ytitle("", size(small)) xtitle("") ///
+		legend(order(1 "Above median nin" 2 "Below median nin") ///
+		size(small) rows(1) pos(6))
+		graph export "$graphs/`y'.png", replace
+restore
 }
 
-// sig: 
+foreach y in `outcomes3' {
+preserve
+	collapse (mean) `y', by(year abv_med_nin)
+	twoway (connected `y' year if abv_med_nin==1) || ///
+		(connected `y' year if abv_med_nin==0), ///
+		title("`y'", size(medium)) ///
+		yla(,labs(small)) xla(,labs(small)) ///
+		ytitle("", size(small)) xtitle("") ///
+		legend(order(1 "Above median nin" 2 "Below median nin") ///
+		size(small) rows(1) pos(6))
+		graph export "$graphs/`y'.png", replace
+restore
+}
 
-/* Duflo:
-xtreg yeduc  1.young#c.nin birthyr##c.ch71                     , fe
-xtreg yeduc  1.young#c.nin birthyr##c.(ch71 en71)              , fe
-xtreg yeduc  1.young#c.nin birthyr##c.(ch71 en71 wsppc)        , fe
-*/
+foreach y in `outcomes4' {
+preserve
+	collapse (mean) `y', by(year abv_med_nin)
+	twoway (connected `y' year if abv_med_nin==1) || ///
+		(connected `y' year if abv_med_nin==0), ///
+		title("`y'", size(medium)) ///
+		yla(,labs(small)) xla(,labs(small)) ///
+		ytitle("", size(small)) xtitle("") ///
+		legend(order(1 "Above median nin" 2 "Below median nin") ///
+		size(small) rows(1) pos(6))
+		graph export "$graphs/`y'.png", replace
+restore
+}
+
+foreach y in `outcomes5' {
+preserve
+	collapse (mean) `y', by(year abv_med_nin)
+	twoway (connected `y' year if abv_med_nin==1) || ///
+		(connected `y' year if abv_med_nin==0), ///
+		title("`y'", size(medium)) ///
+		yla(,labs(small)) xla(,labs(small)) ///
+		ytitle("", size(small)) xtitle("") ///
+		legend(order(1 "Above median nin" 2 "Below median nin") ///
+		size(small) rows(1) pos(6))
+		graph export "$graphs/`y'.png", replace
+restore
+}
