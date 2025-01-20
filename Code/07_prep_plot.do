@@ -136,13 +136,13 @@ egen share_juniorhigh_pre = mean(share_juniorhigh_96) if year>=1996, by(PSID)
 gen share_seniorhigh_96 = share_seniorhigh if year==1996
 egen share_seniorhigh_pre = mean(share_seniorhigh_96) if year>=1996, by(PSID)
 
-gen share_bachelor_prod_96 = share_bachelor_prod if year==1996
-egen share_bachelor_prod_pre = mean(share_bachelor_prod_96) if year>=1996, by(PSID)
+gen share_bachelor_96 = share_bachelor_prod if year==1996
+egen share_bachelor_pre = mean(share_bachelor_96) if year>=1996, by(PSID)
 
-summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_prod_pre if year==1996
-summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_prod_pre if year==1997
-summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_prod_pre if year==1998
-summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_prod_pre if year==1999
+summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_pre if year==1996
+summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_pre if year==1997
+summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_pre if year==1998
+summ share_primary_pre share_juniorhigh_pre share_seniorhigh_pre share_bachelor_pre if year==1999
  
 ********************************************************************************
 
@@ -235,6 +235,11 @@ save "$data/temp_reg.dta", replace
 
 use "$data/temp_reg.dta", clear
 
+local outcomes1 share_primary_pre share_juniorhigh_pre share_seniorhigh_pre ///
+share_bachelor_pre share_primary_prod share_juniorhigh_prod share_seniorhigh_prod ///
+share_bachelor_prod share_primary_male share_juniorhigh_male share_seniorhigh_male ///
+share_bachelor_male
+
 local outcomes2 tfp_wrdg_va_m tfp_acf_va_m1 tfp_acf_va_m2 ///
 ln_output ln_output_pw ///
 ln_tot_goods_produced ln_tot_goods_pw ///
@@ -248,7 +253,6 @@ ln_tot_mach ln_tot_mach_pw //
 local outcomes4 ln_tot_wage ln_tot_wage_pw ///
 ln_tot_wage_prod ln_tot_wage_prod_pw ln_tot_wage_nonprod ln_tot_wage_nonprod_pw ///
 ln_tot_workers ln_tot_paid_workers ln_tot_paid_prod ln_tot_paid_other
-// ln_tot_paid_workers ln_tot_paid_prod ln_tot_paid_other
 
 local outcomes5 ln_num_shifts ln_num_shifts_pw ///
 ln_exp_rd_eng_000 ln_exp_rd_eng_pw ///
@@ -262,6 +266,20 @@ summ med_nin mean_nin
 tab abv_med_nin
 tab abv_mean_nin
 
+foreach y in `outcomes1' {
+preserve
+	collapse (mean) `y', by(year abv_med_nin)
+	twoway (connected `y' year if abv_med_nin==1) || ///
+		(connected `y' year if abv_med_nin==0), ///
+		title("`y'", size(medium)) ///
+		yla(,labs(small)) xla(,labs(small)) ///
+		ytitle("", size(small)) xtitle("") ///
+		legend(order(1 "Above median nin" 2 "Below median nin") ///
+		size(small) rows(1) pos(6))
+		graph export "$graphs/`y'_nin.png", replace
+restore
+}
+
 foreach y in `outcomes2' {
 preserve
 	collapse (mean) `y', by(year abv_med_nin)
@@ -272,7 +290,7 @@ preserve
 		ytitle("", size(small)) xtitle("") ///
 		legend(order(1 "Above median nin" 2 "Below median nin") ///
 		size(small) rows(1) pos(6))
-		graph export "$graphs/`y'.png", replace
+		graph export "$graphs/`y'_nin.png", replace
 restore
 }
 
@@ -286,7 +304,7 @@ preserve
 		ytitle("", size(small)) xtitle("") ///
 		legend(order(1 "Above median nin" 2 "Below median nin") ///
 		size(small) rows(1) pos(6))
-		graph export "$graphs/`y'.png", replace
+		graph export "$graphs/`y'_nin.png", replace
 restore
 }
 
@@ -300,7 +318,7 @@ preserve
 		ytitle("", size(small)) xtitle("") ///
 		legend(order(1 "Above median nin" 2 "Below median nin") ///
 		size(small) rows(1) pos(6))
-		graph export "$graphs/`y'.png", replace
+		graph export "$graphs/`y'_nin.png", replace
 restore
 }
 
@@ -314,6 +332,6 @@ preserve
 		ytitle("", size(small)) xtitle("") ///
 		legend(order(1 "Above median nin" 2 "Below median nin") ///
 		size(small) rows(1) pos(6))
-		graph export "$graphs/`y'.png", replace
+		graph export "$graphs/`y'_nin.png", replace
 restore
 }

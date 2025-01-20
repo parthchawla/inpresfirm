@@ -84,7 +84,7 @@ ln_tot_mach ln_tot_mach_pw //
 local outcomes4 ln_tot_wage ln_tot_wage_pw ///
 ln_tot_wage_prod ln_tot_wage_prod_pw ln_tot_wage_nonprod ln_tot_wage_nonprod_pw ///
 ln_tot_workers ln_tot_paid_workers ln_tot_paid_prod ln_tot_paid_other
-// ln_tot_paid_workers ln_tot_paid_prod ln_tot_paid_other
+// sig: ln_tot_paid_workers ln_tot_paid_prod ln_tot_paid_other
 
 local outcomes5 ln_num_shifts ln_num_shifts_pw ///
 ln_exp_rd_eng_000 ln_exp_rd_eng_pw ///
