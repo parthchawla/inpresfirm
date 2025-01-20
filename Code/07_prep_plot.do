@@ -235,10 +235,9 @@ save "$data/temp_reg.dta", replace
 
 use "$data/temp_reg.dta", clear
 
-local outcomes1 share_primary_pre share_juniorhigh_pre share_seniorhigh_pre ///
-share_bachelor_pre share_primary_prod share_juniorhigh_prod share_seniorhigh_prod ///
-share_bachelor_prod share_primary_male share_juniorhigh_male share_seniorhigh_male ///
-share_bachelor_male
+local outcomes1 share_primary share_juniorhigh share_seniorhigh share_bachelor ///
+share_primary_prod share_juniorhigh_prod share_seniorhigh_prod share_bachelor_prod ///
+share_primary_male share_juniorhigh_male share_seniorhigh_male share_bachelor_male
 
 local outcomes2 tfp_wrdg_va_m tfp_acf_va_m1 tfp_acf_va_m2 ///
 ln_output ln_output_pw ///
