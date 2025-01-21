@@ -151,3 +151,6 @@ foreach y in `outcomes5' {
 	esttab, star(* .10 ** .05 *** .01) not se noomit label
 	eststo clear
 }
+/*
+-: exprd/pw(23)
+*/
