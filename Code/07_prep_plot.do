@@ -49,8 +49,8 @@ save `deflator'
 *** Prep vars
 ********************************************************************************
 
-use "$data/firms_86_99_TFP.dta", clear
-merge 1:1 PSID year regency_code kblir2 using "$data/firms_86_99_merged.dta", nogen
+use "$data/firms_80_04_TFP.dta", clear
+merge 1:1 PSID year regency_code kblir2 using "$data/firms_80_04_merged.dta", nogen
 
 ** Ed attainment ***************************************************************
 
@@ -227,6 +227,7 @@ rename _DYRSTR launch_yr
 
 xtset PSID year
 save "$data/temp_reg.dta", replace
+exit
 */
 
 ********************************************************************************
@@ -239,7 +240,7 @@ local outcomes1 share_primary share_juniorhigh share_seniorhigh share_bachelor /
 share_primary_prod share_juniorhigh_prod share_seniorhigh_prod share_bachelor_prod ///
 share_primary_male share_juniorhigh_male share_seniorhigh_male share_bachelor_male
 
-local outcomes2 tfp_wrdg_va_m tfp_acf_va_m1 tfp_acf_va_m2 ///
+local outcomes2 tfp_wrdg_va_m /*tfp_acf_va_m1 tfp_acf_va_m2*/ ///
 ln_output ln_output_pw ///
 ln_tot_goods_produced ln_tot_goods_pw ///
 ln_value_added ln_value_added_pw ///
