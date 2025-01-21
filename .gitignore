@@ -23,3 +23,5 @@ venv
 *.txt
 *.png
 *.tex
+*.pdf
+*.aux
