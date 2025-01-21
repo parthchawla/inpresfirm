@@ -46,7 +46,7 @@ save `deflator'
 
 ********************************************************************************
 
-use "$data/firms_86_99_merged.dta", clear
+use "$data/firms_80_04_merged.dta", clear
 
 * Create vars for tfp estimation
 gen L = tot_workers
@@ -71,7 +71,7 @@ gen lnM = ln(1+M)
 gen lnVA = ln(1+VA)
 summ lnL lnK lnM lnVA
 
-keep PSID year regency_code kblir2 lnL lnK lnM lnVA
+keep PSID year regency_code kblir2 kblir3 lnL lnK lnM lnVA
 
 ********************************************************************************
 *** WRDG using prodest
@@ -98,14 +98,33 @@ foreach x of local sectors {
     cap drop temp
 }
 
+levelsof kblir3, local(sectors)
+
+foreach x of local sectors {
+	quietly count if kblir3 == `x'
+	di "Observations for sector `x': " r(N)
+	if r(N) < 10 { // Skip with fewer than 10 observations
+		display "Skipping `x' due to insufficient observations."
+		continue
+	}
+	*** Y: Value-added
+	*** State variable: Capital
+	*** Proxy: Materials
+    cap prodest lnVA if kblir3 == `x', state(lnK) free(lnL) proxy(lnM) ///
+	va met(wrdg) reps(50)
+    cap predict temp, residual
+    cap replace tfp_wrdg_va_m = temp if kblir3 == `x'
+    cap drop temp
+}
+
 la var tfp_wrdg_va_m "log(TFP), proxy: mat, va, wrdg (prodest)"
-save "$data/firms_86_99_TFP.dta", replace
+save "$data/firms_80_04_TFP.dta", replace
 
 ********************************************************************************
 *** Distributions
 ********************************************************************************
 
-use "$data/firms_86_99_TFP.dta", clear
+use "$data/firms_80_04_TFP.dta", clear
 
 // Drop outliers:
 summ tfp_wrdg_va_m, detail
@@ -116,7 +135,7 @@ drop if tfp_wrdg_va_m < tfp_wrdg_va_m_p1 | tfp_wrdg_va_m > tfp_wrdg_va_m_p99
 collapse (mean) tfp_wrdg_va_m, by(PSID)
 
 hist tfp_wrdg_va_m, freq name(g1) ///
-title("Avg. firm TFP (1986-99) estimated using the WRDG method with materials as proxy", size(small)) ///
+title("Avg. firm TFP estimated using the WRDG method with materials as proxy", size(small)) ///
 xtitle("log(TFP) (va)", size(small)) ytitle("Freq.", size(small)) ///
 xla(,labsize(small)) ylab(,labsize(small)) ///
 note("Note: TFP is estimated separately for each KBLI sector with at least 10 observations using the prodest command.", size(vsmall))
@@ -126,7 +145,7 @@ graph export "$graphs/tfp_wrdg_va_m.png", replace
 *** Time series
 ********************************************************************************
 
-use "$data/firms_86_99_TFP.dta", clear
+use "$data/firms_80_04_TFP.dta", clear
 
 // Drop outliers:
 summ tfp_wrdg_va_m, detail
@@ -143,4 +162,3 @@ ytitle("log(TFP) (va)", size(small)) xtitle("") ///
 xla(,labsize(small)) ylab(,labsize(small)) ///
 note("Note: TFP is estimated separately for each KBLI sector with at least 10 observations using the prodest command.", size(vsmall))
 graph export "$graphs/tfp_wrdg_va_m_ts.png", replace
-

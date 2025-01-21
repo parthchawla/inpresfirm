@@ -116,5 +116,5 @@ forval yr = 1981/2004 {
 }
 
 tab year
-distinct regency_code // 291
-save "$data/firms_86_99_merged.dta", replace
+distinct regency_code // 295
+save "$data/firms_80_04_merged.dta", replace

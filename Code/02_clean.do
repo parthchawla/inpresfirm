@@ -17,7 +17,7 @@ if "`c(username)'"=="parthchawla1"	{
 
 ********************************************************************************
 
-use "$data/firms_86_99_merged.dta", clear
+use "$data/firms_80_04_merged.dta", clear
 
 rename _DDMSTK p_own_priv
 rename _DPUSAT p_own_cgov
@@ -459,5 +459,4 @@ rename edatt_prod_female_8 edatt_prod_female_phd
 rename edatt_nonprod_male_8 edatt_nonprod_male_phd
 rename edatt_nonprod_female_8 edatt_nonprod_female_phd
 
-
-save "$data/firms_86_99_merged.dta", replace
+save "$data/firms_80_04_merged.dta", replace

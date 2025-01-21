@@ -16,19 +16,19 @@ if "`c(username)'"=="parthchawla1"	{
 }
 
 ********************************************************************************
-import excel using "$data/KBLI 2015 2009 2005.xlsx", clear firstrow
-keep Dig5_05 Dig5_09
-rename (Dig5_05 Dig5_09) (kblir2_m kblir3)
-destring, replace
-duplicates drop
-sort kblir3 kblir2_m
-by kblir3: gen seq = _n
-reshape wide kblir2_m, i(kblir3) j(seq)
-tempfile cw_kbli
-save `cw_kbli'
+// import excel using "$data/KBLI 2015 2009 2005.xlsx", clear firstrow
+// keep Dig5_05 Dig5_09
+// rename (Dig5_05 Dig5_09) (kblir2_m kblir3)
+// destring, replace
+// duplicates drop
+// sort kblir3 kblir2_m
+// by kblir3: gen seq = _n
+// reshape wide kblir2_m, i(kblir3) j(seq)
+// tempfile cw_kbli
+// save `cw_kbli'
 ********************************************************************************
 
-use "$data/firms_86_99_merged.dta", clear
+use "$data/firms_80_04_merged.dta", clear
 rename (_KKI5D _PROD5D _PSID) (KKI5D PROD5D PSID)
 
 merge 1:1 PSID year using "$data/kbli_out.dta"
@@ -51,22 +51,26 @@ replace kblir2=PROD5D if strlen(string(PROD5D))==5 & kblir2==. & year<2000
 replace kblir3=KKI5D  if strlen(string(KKI5D))==5 & kblir3==. & year>=2000 & year<2010
 
 mdesc kblir2 if year<2000 // Till 1999
+mdesc kblir3 if year<2000 // Till 1999
 mdesc kblir2 if year>=2000 & year<2010 // 2000-2009
 mdesc kblir3 if year>=2000 & year<2010 // 2000-2009
 drop PROD5D KKI5D
 
-merge m:1 kblir3 using `cw_kbli'
-drop if _merge==2
-drop _merge
+replace kblir3=. if year<2000
+replace kblir2=. if year>=2000 & year<2010
 
-forval i=1/32 {
-	replace kblir2=kblir2_m`i' if kblir2==.
-	drop kblir2_m`i'
-}
+// merge m:1 kblir3 using `cw_kbli'
+// drop if _merge==2
+// drop _merge
+// forval i=1/32 {
+// 	replace kblir2=kblir2_m`i' if kblir2==. & year>=2000 & year<2010
+// 	drop kblir2_m`i'
+// }
+// mdesc kblir2 if year<2000 // Till 1999
+// mdesc kblir2 if year>=2000 & year<2010 // 2000-2009
 
-mdesc kblir2 if year<2000 // Till 1999
-mdesc kblir2 if year>=2000 & year<2010 // 2000-2009
+** Just add kblir2 and kblir3 FE separately
 
 order PSID year regency_code kblir2 kblir3 _DKABUP _DPROVI
 drop if PSID==96.59375
-save "$data/firms_86_99_merged.dta", replace
+save "$data/firms_80_04_merged.dta", replace
