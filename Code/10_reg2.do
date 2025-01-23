@@ -36,10 +36,8 @@ bys year: egen mean_nin = mean(nin)
 gen abv_med_nin = (nin > med_nin)
 gen abv_mean_nin = (nin > mean_nin)
 summ med_nin mean_nin
-tab abv_med_nin
-tab abv_mean_nin
 
-xtset PSID
+xtset PSID year
 gen Post = (launch_yr>=86)
 tab Post
 
