@@ -22,7 +22,7 @@ if "`c(username)'"=="parthchawla1"	{
 use "$data/temp_reg.dta", clear
 //replace kblir2 = kblir3 if year>=2000 & year<2010
 
-** When INPRES cohort starts entering labor force ******************************
+********************************************************************************
 keep if year>=1986
 drop if year>1999
 ********************************************************************************

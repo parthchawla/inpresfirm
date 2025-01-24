@@ -21,7 +21,7 @@ if "`c(username)'"=="parthchawla1"	{
 
 use "$data/temp_reg.dta", clear
 
-** When INPRES cohort starts entering labor force ******************************
+********************************************************************************
 //keep if year>=1986
 drop if year>1999
 ********************************************************************************
