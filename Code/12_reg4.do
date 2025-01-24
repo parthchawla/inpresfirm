@@ -26,9 +26,13 @@ use "$data/temp_reg.dta", clear
 drop if year>1999
 ********************************************************************************
 
-local outcomes4 ln_tot_wage ln_tot_wage_pw ///
-ln_tot_wage_prod ln_tot_wage_prod_pw ln_tot_wage_nonprod ln_tot_wage_nonprod_pw ///
-ln_tot_workers ln_tot_paid_workers ln_tot_paid_prod ln_tot_paid_other
+local outcomes3 ln_exports ln_exports_pw ///
+ln_inv_total ln_inv_total_pw ln_inv_private ln_inv_private_pw ln_inv_gov ln_inv_gov_pw ///
+ln_tot_mach ln_tot_mach_pw
+
+local outcomes5 ln_num_shifts ln_num_shifts_pw ///
+ln_exp_rd_eng_000 ln_exp_rd_eng_pw ///
+ln_exp_hr_training_000 ln_exp_hr_training_pw
 
 bys year: egen med_nin = median(nin)
 bys year: egen mean_nin = mean(nin)
@@ -42,7 +46,7 @@ label var abv_med_nin "Above median"
 label var nin "INPRES"
 label var tfp_wrdg_va_m "WTFP"
 
-foreach y in `outcomes4' {
+foreach y in `outcomes3' {
 	
 	eststo: qui reghdfe `y' i.year##c.nin, allbase noomit ///
 	absorb(i.year##c.(ch71 en71) kblir2) vce(cl regency_code)
@@ -55,15 +59,42 @@ foreach y in `outcomes4' {
 	eststo clear
 	
 }
-* Same negative wage effect like Duflo
 
-foreach y in `outcomes4' {
+foreach y in `outcomes3' {
 	
 	eststo: qui reghdfe `y' i.year##i.abv_med_nin, allbase noomit ///
 	absorb(i.year##c.(ch71 en71) kblir2) vce(cl regency_code)
 	
 	eststo: qui reghdfe `y' i.year##i.abv_med_nin, allbase noomit ///
 	absorb(i.year##c.(ch71 en71) regency_code kblir2) vce(cl regency_code)
+	
+	esttab using "$results/Regressions/dufreg2`y'.tex", ///
+	star(* .10 ** .05 *** .01) not se noomit label replace compress
+	eststo clear
+	
+}
+
+foreach y in `outcomes5' {
+	
+	eststo: qui reghdfe `y' nin ch71 en71, allbase noomit ///
+	absorb(year kblir2) vce(cl regency_code)
+	
+	eststo: qui reghdfe `y' nin ch71 en71, allbase noomit ///
+	absorb(year kblir2 regency_code) vce(cl regency_code)
+	
+	esttab using "$results/Regressions/dufreg1`y'.tex", ///
+	star(* .10 ** .05 *** .01) not se noomit label replace compress
+	eststo clear
+	
+}
+
+foreach y in `outcomes5' {
+	
+	eststo: qui reghdfe `y' abv_med_nin ch71 en71, allbase noomit ///
+	absorb(year kblir2) vce(cl regency_code)
+	
+	eststo: qui reghdfe `y' abv_med_nin ch71 en71, allbase noomit ///
+	absorb(year kblir2 regency_code) vce(cl regency_code)
 	
 	esttab using "$results/Regressions/dufreg2`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress

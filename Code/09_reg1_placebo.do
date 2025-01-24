@@ -37,7 +37,7 @@ ln_total_est_val ln_total_est_val_pw //
 
 local outcomes3 ln_exports ln_exports_pw ///
 ln_inv_total ln_inv_total_pw ln_inv_private ln_inv_private_pw ln_inv_gov ln_inv_gov_pw ///
-ln_tot_mach ln_tot_mach_pw // 
+ln_tot_mach ln_tot_mach_pw
 
 local outcomes4 ln_tot_wage ln_tot_wage_pw ///
 ln_tot_wage_prod ln_tot_wage_prod_pw ln_tot_wage_nonprod ln_tot_wage_nonprod_pw ///
