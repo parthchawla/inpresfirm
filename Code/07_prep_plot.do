@@ -236,6 +236,11 @@ exit
 
 use "$data/temp_reg.dta", clear
 
+********************************************************************************
+keep if year>=1986
+drop if year>1999
+********************************************************************************
+
 local outcomes1 share_primary share_juniorhigh share_seniorhigh share_bachelor ///
 share_primary_prod share_juniorhigh_prod share_seniorhigh_prod share_bachelor_prod ///
 share_primary_male share_juniorhigh_male share_seniorhigh_male share_bachelor_male
@@ -272,10 +277,10 @@ preserve
 	twoway (connected `y' year if abv_med_nin==1) || ///
 		(connected `y' year if abv_med_nin==0), ///
 		title("`y'", size(medium)) ///
-		yla(,labs(small)) xla(,labs(small)) ///
+		yla(,labs(small)) xla(1987(2)1999,labs(small)) ///
 		ytitle("", size(small)) xtitle("") ///
-		legend(order(1 "Above median nin" 2 "Below median nin") ///
-		size(small) rows(1) pos(6))
+		legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
+		size(small) rows(1) pos(6)) xline(1997)
 		graph export "$graphs/`y'_nin.png", replace
 restore
 }
@@ -286,10 +291,10 @@ preserve
 	twoway (connected `y' year if abv_med_nin==1) || ///
 		(connected `y' year if abv_med_nin==0), ///
 		title("`y'", size(medium)) ///
-		yla(,labs(small)) xla(,labs(small)) ///
+		yla(,labs(small)) xla(1987(2)1999,labs(small)) ///
 		ytitle("", size(small)) xtitle("") ///
-		legend(order(1 "Above median nin" 2 "Below median nin") ///
-		size(small) rows(1) pos(6))
+		legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
+		size(small) rows(1) pos(6)) xline(1997)
 		graph export "$graphs/`y'_nin.png", replace
 restore
 }
@@ -300,10 +305,10 @@ preserve
 	twoway (connected `y' year if abv_med_nin==1) || ///
 		(connected `y' year if abv_med_nin==0), ///
 		title("`y'", size(medium)) ///
-		yla(,labs(small)) xla(,labs(small)) ///
+		yla(,labs(small)) xla(1987(2)1999,labs(small)) ///
 		ytitle("", size(small)) xtitle("") ///
-		legend(order(1 "Above median nin" 2 "Below median nin") ///
-		size(small) rows(1) pos(6))
+		legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
+		size(small) rows(1) pos(6)) xline(1997)
 		graph export "$graphs/`y'_nin.png", replace
 restore
 }
@@ -314,10 +319,10 @@ preserve
 	twoway (connected `y' year if abv_med_nin==1) || ///
 		(connected `y' year if abv_med_nin==0), ///
 		title("`y'", size(medium)) ///
-		yla(,labs(small)) xla(,labs(small)) ///
+		yla(,labs(small)) xla(1987(2)1999,labs(small)) ///
 		ytitle("", size(small)) xtitle("") ///
-		legend(order(1 "Above median nin" 2 "Below median nin") ///
-		size(small) rows(1) pos(6))
+		legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
+		size(small) rows(1) pos(6)) xline(1997)
 		graph export "$graphs/`y'_nin.png", replace
 restore
 }
@@ -328,10 +333,10 @@ preserve
 	twoway (connected `y' year if abv_med_nin==1) || ///
 		(connected `y' year if abv_med_nin==0), ///
 		title("`y'", size(medium)) ///
-		yla(,labs(small)) xla(,labs(small)) ///
+		yla(,labs(small)) xla(1987(2)1999,labs(small)) ///
 		ytitle("", size(small)) xtitle("") ///
-		legend(order(1 "Above median nin" 2 "Below median nin") ///
-		size(small) rows(1) pos(6))
+		legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
+		size(small) rows(1) pos(6)) xline(1997)
 		graph export "$graphs/`y'_nin.png", replace
 restore
 }
