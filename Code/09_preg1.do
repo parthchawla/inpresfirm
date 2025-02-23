@@ -81,20 +81,6 @@ foreach y in `outcomes2' {
 /*
 +: wtfp(1), output/pw(12345), goods(123), goodspw(1235), va(1)
 */
-foreach y in `outcomes2' {
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(regency_code kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
-	
-	esttab using "$results/Regressions/preg2`y'.tex", ///
-	star(* .10 ** .05 *** .01) not se noomit label replace compress
-	eststo clear
-}
 
 ********************************************************************************
 
@@ -116,20 +102,6 @@ foreach y in `outcomes3' {
 -: exports(123), exportspw(23)
 +: invpw(1), invprivpw(12)
 */
-foreach y in `outcomes3' {
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(regency_code kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
-	
-	esttab using "$results/Regressions/preg2`y'.tex", ///
-	star(* .10 ** .05 *** .01) not se noomit label replace compress
-	eststo clear
-}
 
 ********************************************************************************
 
@@ -151,20 +123,6 @@ foreach y in `outcomes4' {
 -: wageprodpw(24), shiftspw(12)
 +: wagenonprodpw(4)
 */
-foreach y in `outcomes4' {
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(regency_code kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
-	
-	esttab using "$results/Regressions/preg2`y'.tex", ///
-	star(* .10 ** .05 *** .01) not se noomit label replace compress
-	eststo clear
-}
 
 ********************************************************************************
 
@@ -185,17 +143,3 @@ foreach y in `outcomes5' {
 /*
 -: exprd/pw(23)
 */
-foreach y in `outcomes5' {
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(regency_code kblir2 year) vce(cl regency_code)
-	
-	eststo: qui reghdfe `y' i.post_95##i.abv_med_nin ch71 en71, ///
-	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
-	
-	esttab using "$results/Regressions/preg2`y'.tex", ///
-	star(* .10 ** .05 *** .01) not se noomit label replace compress
-	eststo clear
-}
