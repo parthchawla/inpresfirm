@@ -33,36 +33,20 @@ ln_value_added ln_value_added_pw
 bys year: egen med_nin = median(nin)
 gen abv_med_nin = (nin > med_nin)
 
-/*
-foreach y in `outcomes' {
-	forval t = 1994/1996 {
-		di " "
-		di "`y' `t' Above Median"
-		summ `y' if year==`t' & abv_med_nin==1, detail
-		hist `y' if year==`t' & abv_med_nin==1, freq ///
-		title("`y' `t' abv med") xla(,labsize(small)) ylab(,labsize(small)) ///
-		xtitle("", size(small)) ytitle("Freq.", size(small)) legend(off)
-		graph export "$graphs/`y'_`t'_am_dist.png", replace
-// 		di "`y' `t' Below Median"
-// 		summ `y' if year==`t' & abv_med_nin==0, detail
-// 		hist `y' if year==`t' & abv_med_nin==0, freq ///
-// 		title("`y' `t' bel med") xla(,labsize(small)) ylab(,labsize(small)) ///
-// 		xtitle("", size(small)) ytitle("Freq.", size(small)) legend(off)
-// 		graph export "$graphs/`y'_`t'_bm_dist.png", replace
-	}
-}
-*/
+********************************************************************************
+* Count how many distinct years each district has, find the max, then keep only
+* districts that match that maximum.
+********************************************************************************
 
-// foreach y in `outcomes' {
-// 	winsor2 `y', cuts(1 99) replace
-// }
-
-// foreach y in `outcomes' {
-// 	summ `y', detail
-// 	scalar `y'_p1 = r(p1)
-// 	scalar `y'_p99 = r(p99)
-// 	replace `y' = . if `y' < `y'_p1 | `y' > `y'_p99
-// }
+distinct regency_code if abv_med_nin==1
+distinct regency_code if abv_med_nin==0
+bys regency_code: egen nyrs = nvals(year)
+quietly summarize nyrs
+local maxnyrs = r(max)
+keep if nyrs == `maxnyrs'
+drop nyrs
+distinct regency_code if abv_med_nin==1
+distinct regency_code if abv_med_nin==0
 
 collapse (count) firm_count=PSID (mean) tfp_wrdg_va_m ln_output ln_output_pw ///
 ln_tot_goods_produced ln_tot_goods_pw ln_tot_workers ///
@@ -79,7 +63,7 @@ twoway (connected tfp_wrdg_va_m year if abv_med_nin==1) || ///
 	ytitle("log(TFP)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/tfp_wrdg_va_m_winz_nin.png", replace
+	graph export "$graphs/tfp_wrdg_va_m_bal.png", replace
 
 twoway (connected ln_output year if abv_med_nin==1) || ///
 	(connected ln_output year if abv_med_nin==0), ///
@@ -88,7 +72,7 @@ twoway (connected ln_output year if abv_med_nin==1) || ///
 	ytitle("log(output)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_output_winz_nin.png", replace
+	graph export "$graphs/ln_output_bal.png", replace
 
 twoway (connected ln_output_pw year if abv_med_nin==1) || ///
 	(connected ln_output_pw year if abv_med_nin==0), ///
@@ -97,7 +81,7 @@ twoway (connected ln_output_pw year if abv_med_nin==1) || ///
 	ytitle("log(output per worker)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_output_pw_winz_nin.png", replace
+	graph export "$graphs/ln_output_pw_bal.png", replace
 
 twoway (connected ln_tot_goods_produced year if abv_med_nin==1) || ///
 	(connected ln_tot_goods_produced year if abv_med_nin==0), ///
@@ -106,7 +90,7 @@ twoway (connected ln_tot_goods_produced year if abv_med_nin==1) || ///
 	ytitle("", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_tot_goods_produced_winz_nin.png", replace
+	graph export "$graphs/ln_tot_goods_produced_bal.png", replace
 
 twoway (connected ln_tot_goods_pw year if abv_med_nin==1) || ///
 	(connected ln_tot_goods_pw year if abv_med_nin==0), ///
@@ -115,7 +99,7 @@ twoway (connected ln_tot_goods_pw year if abv_med_nin==1) || ///
 	ytitle("log(goods produced per worker)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_tot_goods_pw_winz_nin.png", replace
+	graph export "$graphs/ln_tot_goods_pw_bal.png", replace
 
 twoway (connected ln_value_added year if abv_med_nin==1) || ///
 	(connected ln_value_added year if abv_med_nin==0), ///
@@ -124,7 +108,7 @@ twoway (connected ln_value_added year if abv_med_nin==1) || ///
 	ytitle("log(va)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_value_added_winz_nin.png", replace
+	graph export "$graphs/ln_value_added_bal.png", replace
 
 twoway (connected ln_value_added_pw year if abv_med_nin==1) || ///
 	(connected ln_value_added_pw year if abv_med_nin==0), ///
@@ -133,7 +117,7 @@ twoway (connected ln_value_added_pw year if abv_med_nin==1) || ///
 	ytitle("log(va per worker)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_value_added_pw_winz_nin.png", replace
+	graph export "$graphs/ln_value_added_pw_bal.png", replace
 
 twoway (connected ln_tot_workers year if abv_med_nin==1) || ///
 	(connected ln_tot_workers year if abv_med_nin==0), ///
@@ -142,4 +126,4 @@ twoway (connected ln_tot_workers year if abv_med_nin==1) || ///
 	ytitle("log(employees)", size(small)) xtitle("") ///
 	legend(order(1 "Above median INPRES intensity" 2 "Below median INPRES intensity") ///
 	size(small) rows(1) pos(6)) xline(1997)
-	graph export "$graphs/ln_tot_workers_winz_nin.png", replace
+	graph export "$graphs/ln_tot_workers_bal.png", replace
