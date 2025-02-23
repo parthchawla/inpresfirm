@@ -14,7 +14,6 @@ if "`c(username)'"=="parthchawla1"	{
 	global graphs "$root/Graphs"
 	global results "$root/Results"
 }
-
 /*
 ********************************************************************************
 *** GDP deflator to adjust for inflation
@@ -227,7 +226,6 @@ rename _DYRSTR launch_yr
 
 xtset PSID year
 save "$data/temp_reg.dta", replace
-exit
 */
 
 ********************************************************************************
