@@ -50,7 +50,7 @@ foreach y in `outcomes4' {
 	eststo: qui reghdfe `y' i.year##c.nin, allbase noomit ///
 	absorb(i.year##c.(ch71 en71) regency_code kblir2) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/dufreg1`y'.tex", ///
+	esttab using "$results/dufreg1`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 	
@@ -65,7 +65,7 @@ foreach y in `outcomes4' {
 	eststo: qui reghdfe `y' i.year##i.abv_med_nin, allbase noomit ///
 	absorb(i.year##c.(ch71 en71) regency_code kblir2) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/dufreg2`y'.tex", ///
+	esttab using "$results/dufreg2`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 	

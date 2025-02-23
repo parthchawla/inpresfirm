@@ -53,7 +53,7 @@ foreach y in `outcomes1' {
 	eststo: qui reghdfe `y' abv_med_nin ch71 en71 if year==1996, ///
 	allbase noomit noabsorb vce(cl regency_code)
 	
-	esttab using "$results/Regressions/mreg1`y'.tex", ///
+	esttab using "$results/mreg1`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 }
@@ -66,7 +66,7 @@ foreach y in `outcomes1' {
 	eststo: qui reghdfe `y' en71 if year==1996, ///
 	allbase noomit absorb(kblir2) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/mreg2`y'.tex", ///
+	esttab using "$results/mreg2`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 }
@@ -81,7 +81,7 @@ foreach y in `outcomes1' {
 // 	if year==1996 & (launch_yr>=84 & launch_yr<=88), ///
 // 	allbase noomit absorb(regency_code kblir2) vce(cl regency_code)
 //	
-// 	esttab using "$results/Regressions/mreg3`y'.tex", ///
+// 	esttab using "$results/mreg3`y'.tex", ///
 // 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 // 	eststo clear
 // }

@@ -74,7 +74,7 @@ foreach y in `outcomes2' {
 	eststo: qui reghdfe `y' i.post_95##c.nin ch71 en71, ///
 	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/preg1`y'.tex", ///
+	esttab using "$results/preg1`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 }
@@ -94,7 +94,7 @@ foreach y in `outcomes3' {
 	eststo: qui reghdfe `y' i.post_95##c.nin ch71 en71, ///
 	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/preg1`y'.tex", ///
+	esttab using "$results/preg1`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 }
@@ -115,7 +115,7 @@ foreach y in `outcomes4' {
 	eststo: qui reghdfe `y' i.post_95##c.nin ch71 en71, ///
 	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/preg1`y'.tex", ///
+	esttab using "$results/preg1`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 }
@@ -136,7 +136,7 @@ foreach y in `outcomes5' {
 	eststo: qui reghdfe `y' i.post_95##c.nin ch71 en71, ///
 	allbase noomit absorb(PSID regency_code kblir2 year) vce(cl regency_code)
 	
-	esttab using "$results/Regressions/preg1`y'.tex", ///
+	esttab using "$results/preg1`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 	eststo clear
 }
