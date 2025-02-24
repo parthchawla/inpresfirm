@@ -50,34 +50,31 @@ label var nin "INPRES"
 // 	eststo: qui reghdfe `y' nin if year==1996, ///
 // 	allbase noomit noabsorb vce(cl regency_code)
 //	
-// 	eststo: qui reghdfe `y' abv_med_nin if year==1996, ///
-// 	allbase noomit noabsorb vce(cl regency_code)
-//	
 // 	esttab using "$results/mreg1`y'.tex", ///
 // 	star(* .10 ** .05 *** .01) not se noomit label replace compress
 // 	eststo clear
 // }
 ** high nin firms have lower educ in 96
 
-// foreach y in `outcomes1' {
-// 	eststo: qui reghdfe `y' en71 if year==1996, ///
-// 	allbase noomit noabsorb vce(cl regency_code)
-//	
-// 	eststo: qui reghdfe `y' en71 if year==1996, ///
-// 	allbase noomit absorb(kblir2) vce(cl regency_code)
-//	
-// 	esttab using "$results/mreg2`y'.tex", ///
-// 	star(* .10 ** .05 *** .01) not se noomit label replace compress
-// 	eststo clear
-// }
+foreach y in `outcomes1' {
+	eststo: qui reghdfe `y' en71 if year==1996, ///
+	allbase noomit noabsorb vce(cl regency_code)
+	
+	eststo: qui reghdfe `y' en71 if year==1996, ///
+	allbase noomit absorb(kblir2) vce(cl regency_code)
+	
+	esttab using "$results/mreg2`y'.tex", ///
+	star(* .10 ** .05 *** .01) not se noomit label replace compress
+	eststo clear
+}
 ** high enrollment in 71 means high firm educ in 96
 
 foreach y in `outcomes1' {
 	eststo: qui reghdfe `y' nin en71 if year==1996, ///
 	allbase noomit noabsorb vce(cl regency_code)
 	
-	eststo: qui reghdfe `y' abv_med_nin en71 if year==1996, ///
-	allbase noomit noabsorb vce(cl regency_code)
+	eststo: qui reghdfe `y' nin en71 if year==1996, ///
+	allbase noomit absorb(kblir2) vce(cl regency_code)
 	
 	esttab using "$results/mreg3`y'.tex", ///
 	star(* .10 ** .05 *** .01) not se noomit label replace compress
