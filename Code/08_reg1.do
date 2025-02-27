@@ -82,6 +82,17 @@ foreach y in `outcomes2' {
 /*
 +: wtfp(1), output/pw(12345), goods(123), goodspw(1235), va(1)
 */
+
+/*
+*** INTERPRETATION with Firm FE:
+Imagine a standard DiD setup with two time periods (pre vs. post) and two groups
+(high-nin vs. low-nin). If each firm i is observed in both periods, the firm
+fixed effect removes the baseline level of the firm's outcome—everything that
+doesn't vary over time for that firm. Then the coef. on (Post × INPRES) tells
+you how the firm's outcome shifts from pre to post above and beyond the shift
+you'd see in a low-nin firm of the same baseline level.
+*/
+
 // foreach y in `outcomes2' {
 // 	eststo: qui reghdfe `y' i.post_97##i.abv_med_nin ch71 en71, ///
 // 	allbase noomit absorb(kblir2 year) vce(cl regency_code)
